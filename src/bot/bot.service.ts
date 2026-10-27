@@ -64,7 +64,7 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
 
     this.bot.hears(BTN.info, (ctx) =>
       ctx.reply(
-        "Bu bot NestJS va grammy yordamida yozilgan o'quv loyihasi. 📚",
+        "Bu bot NestJS va grammy yordamida yozilgan o'quv loyihasi. 📚 va yangilandi",
       ),
     );
 
