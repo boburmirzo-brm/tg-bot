@@ -1,0 +1,32 @@
+
+name: Deploy Telegram Bot
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /opt/tg-bot
+            git pull origin main
+            docker build -t tg-bot:latest .
+            docker rm -f tg-bot
+            docker run -d \
+              --name tg-bot \
+              --restart unless-stopped \
+              --env-file /opt/tg-bot/.env \
+              tg-bot:latest
+            docker image prune -f
